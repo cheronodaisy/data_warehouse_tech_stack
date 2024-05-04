@@ -13,7 +13,7 @@ default_args = {
     'retries': 1,
 }
 
-dag = DAG('airflow', default_args=default_args, schedule_interval='@once')
+dag = DAG('Test', default_args=default_args, schedule_interval='@once')
 
 # Define tasks
 start_task = DummyOperator(task_id='start_task', dag=dag)

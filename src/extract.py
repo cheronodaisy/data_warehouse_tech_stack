@@ -14,7 +14,6 @@ Usage:
         python extract.py
 """
 import pandas as pd
-import psycopg2
 from sqlalchemy import create_engine
 
 class Extract:
@@ -49,62 +48,17 @@ class Extract:
 
         return df_track, df_trajectory
 
-    # def save_to_postgres(self, df_track, df_trajectory, host, database, user, password):
-    #     try:
-    #         conn = psycopg2.connect(
-    #             host=host,
-    #             database=database,
-    #             user=user,
-    #             password=password
-    #         )
-    #         cursor = conn.cursor()
-
-    #         # Create tables
-    #         cursor.execute('''
-    #             CREATE TABLE IF NOT EXISTS track (
-    #                 track_id INTEGER PRIMARY KEY,
-    #                 type VARCHAR(255),
-    #                 traveled_d FLOAT,
-    #                 avg_speed FLOAT
-    #             )
-    #         ''')
-
-    #         cursor.execute('''
-    #             CREATE TABLE IF NOT EXISTS trajectory (
-    #                 track_id INTEGER,
-    #                 lat FLOAT,
-    #                 lon FLOAT,
-    #                 speed FLOAT,
-    #                 lon_acc FLOAT,
-    #                 lat_acc FLOAT,
-    #                 time FLOAT
-    #             )
-    #         ''')
-
-    #         # Insert data
-    #         df_track.to_sql('track', conn, if_exists='append', index=False)
-    #         df_trajectory.to_sql('trajectory', conn, if_exists='append', index=False)
-
-    #         conn.commit()
-    #         print("Data inserted successfully into PostgreSQL")
-
-    #     except (Exception, psycopg2.DatabaseError) as error:
-    #         print("Error while working with PostgreSQL", error)
-    #     finally:
-    #         if conn is not None:
-    #             conn.close()
-
-
-   # Other methods remain the same...
-
     def save_to_postgres(self, df_track, df_trajectory, host, database, user, password):
         try:
             # Create SQLAlchemy engine
             engine = create_engine(f'postgresql://{user}:{password}@{host}/{database}')
 
-            # Create tables
-            df_track.to_sql('track', engine, if_exists='append', index=False)
-            df_trajectory.to_sql('trajectory', engine, if_exists='append', index=False)
+            # Check if data already exists in tables
+            if not engine.has_table('track'):
+                df_track.to_sql('track', engine, if_exists='append', index=False)
+
+            if not engine.has_table('trajectory'):
+                df_trajectory.to_sql('trajectory', engine, if_exists='append', index=False)
 
             print("Data inserted successfully into PostgreSQL")
 
@@ -116,10 +70,7 @@ import os
 
 load_dotenv()
 
-password = os.getenv('PG_PASSWORD')
-
-# Usage example
 if __name__ == "__main__":
     extractor = Extract("../data/20181024_d1_0830_0900.csv")
     df_track, df_trajectory = extractor.extract_data()
-    extractor.save_to_postgres(df_track, df_trajectory, host='localhost', database='traffic', user='daisy', password=password)
+    extractor.save_to_postgres(df_track, df_trajectory, host='localhost', database='traffic', user='daisy', password=os.getenv('PG_PASSWORD'))
