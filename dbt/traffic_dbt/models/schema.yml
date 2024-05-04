@@ -1,0 +1,11 @@
+version: 2
+
+models:
+  - name: fast_vehicles
+    description: "Top 50 fastest vehicles"
+    
+  - name: vehicle_details
+    description: "Return vehicle details including distance and speed"
+  
+  - name: traffic_details
+    description: "Return vehicle types for the fastest vehicles"
