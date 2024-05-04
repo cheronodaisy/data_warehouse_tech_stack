@@ -73,6 +73,6 @@ import os
 load_dotenv()
 
 if __name__ == "__main__":
-    extractor = Extract("./data/20181024_d1_0830_0900.csv")
+    extractor = Extract("/home/daisy/Desktop/tenx/data_warehouse_tech_stack/data/20181024_d1_0830_0900.csv")
     df_track, df_trajectory = extractor.extract_data()
     extractor.save_to_postgres(df_track, df_trajectory, host='localhost', database='traffic', user='daisy', password=os.getenv('PG_PASSWORD'))
