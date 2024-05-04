@@ -14,7 +14,7 @@ Usage:
         python extract.py
 """
 import pandas as pd
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, inspect
 
 class Extract:
     def __init__(self, csv_file):
@@ -53,11 +53,13 @@ class Extract:
             # Create SQLAlchemy engine
             engine = create_engine(f'postgresql://{user}:{password}@{host}/{database}')
 
+            inspector = inspect(engine)
+
             # Check if data already exists in tables
-            if not engine.has_table('track'):
+            if not inspector.has_table('track'):
                 df_track.to_sql('track', engine, if_exists='append', index=False)
 
-            if not engine.has_table('trajectory'):
+            if not inspector.has_table('trajectory'):
                 df_trajectory.to_sql('trajectory', engine, if_exists='append', index=False)
 
             print("Data inserted successfully into PostgreSQL")
@@ -71,6 +73,6 @@ import os
 load_dotenv()
 
 if __name__ == "__main__":
-    extractor = Extract("../data/20181024_d1_0830_0900.csv")
+    extractor = Extract("./data/20181024_d1_0830_0900.csv")
     df_track, df_trajectory = extractor.extract_data()
     extractor.save_to_postgres(df_track, df_trajectory, host='localhost', database='traffic', user='daisy', password=os.getenv('PG_PASSWORD'))

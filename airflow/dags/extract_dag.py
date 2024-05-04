@@ -1,6 +1,5 @@
 from airflow import DAG
-from airflow.operators.python_operator import PythonOperator
-from airflow.operators.postgres_operator import PostgresOperator
+from airflow.operators.python import PythonOperator
 from datetime import datetime
 from extract import Extract
 from dotenv import load_dotenv
