@@ -1,4 +1,4 @@
-# Data Engineering: Data Warehouse Tech Stack with PostgreSQL, DBT, and Airflow
+# Data Engineering - Data Warehouse Tech Stack with PostgreSQL, DBT, and Airflow
 
 ## Project Overview
 
