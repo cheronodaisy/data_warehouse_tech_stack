@@ -61,9 +61,9 @@ The dataset used in this project is from pNEUMA, which includes naturalistic tra
 
 The project uses the ELT framework to manage the data pipeline:
 
-- **Extract**: Data is extracted from the source (pNEUMA Dataset).
-- **Load**: The extracted data is loaded into the data warehouse (PostgreSQL).
-- **Transform**: Data transformation is performed using DBT based on the department's needs.
+- **Extract**- Data is extracted from the source (pNEUMA Dataset).
+- **Load** -The extracted data is loaded into the data warehouse (PostgreSQL).
+- **Transform** - Data transformation is performed using DBT based on the department's needs.
 
 ## Contributing
 
